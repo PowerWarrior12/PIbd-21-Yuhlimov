@@ -2,16 +2,25 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Process {
-    public int id;
-    public int allTime = 0;
+    private int id;
+    private int allTime = 0;
 
-    public ArrayList<Flow> flows = new ArrayList<>();
+    private ArrayList<Flow> flows = new ArrayList<>();
 
     private Random ran = new Random();
 
     public Process(int id) {
         this.id = id;
     }
+    
+    public int getId() {
+    	return id;
+    }
+    
+    public ArrayList<Flow> getFlows() {
+    	return flows;
+    }
+    
     public void createFlows() {
         for (int i = 0; i < 1 + ran.nextInt(10); i++) {
             int nesTime = 1 + ran.nextInt(10);
