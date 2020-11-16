@@ -24,6 +24,10 @@ public class PageTable {
 		}
 	}
 	
+	public Page getPage(int ind) {
+		return pageTable.remove(ind);
+	}
+	
 	public int getSize() {
 		return this.pageTable.size();
 	}
@@ -54,5 +58,14 @@ public class PageTable {
 			}
 		}
 		return false;
+	}
+	
+	public boolean checkContain(int count) {
+		if (count > PagesCount*0.8) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }
