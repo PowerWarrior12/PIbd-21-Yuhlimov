@@ -18,7 +18,15 @@ public class Process {
 		return this.pageTable.getPage();
 	}
 	
+	public Page getPage(int ind) {
+		return pageTable.getPage(ind);
+	}
+	
 	public void addPage(Page page) {
 		pageTable.addPage(page);
+	}
+	
+	public int getSize() {
+		return pageTable.getSize();
 	}
 }
