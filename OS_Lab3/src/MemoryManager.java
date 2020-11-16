@@ -17,6 +17,9 @@ public class MemoryManager {
 	public void run() {
 		while (!processes.isEmpty()) {
 			for (Process process : processes) {
+				if (RAM.checkContain()) {
+					swap(process);
+				}
 				System.out.println("Process : " + process.getID());
 				System.out.println("\tLoad page");
 				Page nowPage = process.getNextPage();
@@ -63,6 +66,24 @@ public class MemoryManager {
 					
 				}
 			}
+		}
+	}
+	
+	public void swap(Process process) {
+		System.out.print("Swapping start");
+		for (int i = 0;i<process.getSize();i++) {
+			Page safePage = RAM.getPage(i);
+			if (RAM.getPage(i) != null) {
+				System.out.print("\tSave page " + safePage.getPageID() + " of process : " + safePage.getProcessID());
+				for (Process safeProcess : processes) {
+					if (safePage.getProcessID() == safeProcess.getID()) {
+						safeProcess.addPage(safePage);
+						break;
+					}
+				}
+			}
+			System.out.println("\tAdding a page " + process.getPage(i).getPageID() + " of  process : " + process.getPage(i).getProcessID());
+			RAM.addPage(process.getPage(i));
 		}
 	}
 }
