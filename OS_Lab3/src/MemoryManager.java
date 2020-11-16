@@ -7,6 +7,7 @@ public class MemoryManager {
 	private int pageCapacity = 64;
 	private PageTable RAM = new PageTable(memoryCapacity/pageCapacity);
 	private LinkedList<Page> pagesQueue = new LinkedList<Page>();
+	private int countPageCapacity = 0;
 	
 	public MemoryManager() {
         for (int i = 0; i < 5; i++) {
@@ -17,8 +18,10 @@ public class MemoryManager {
 	public void run() {
 		while (!processes.isEmpty()) {
 			for (Process process : processes) {
-				if (RAM.checkContain()) {
+				if (RAM.checkContain(countPageCapacity)) {
 					swap(process);
+					countPageCapacity = 0;
+					continue;
 				}
 				System.out.println("Process : " + process.getID());
 				System.out.println("\tLoad page");
@@ -43,6 +46,7 @@ public class MemoryManager {
 								System.out.println("\tPage : " + safePage.getPageID() + " from process : " + safePage.getProcessID() + " remove from RAM");
 								RAM.removePage(safePage);
 								System.out.println("\tPage : " + nowPage.getPageID() + " adding to RAM");
+								countPageCapacity++;
 								RAM.addPage(nowPage);
 								for (Process safeProcess : processes) {
 									if (safePage.getProcessID() == safeProcess.getID()) {
@@ -70,11 +74,12 @@ public class MemoryManager {
 	}
 	
 	public void swap(Process process) {
-		System.out.print("Swapping start");
+		System.out.println("Swapping start");
 		for (int i = 0;i<process.getSize();i++) {
-			Page safePage = RAM.getPage(i);
-			if (RAM.getPage(i) != null) {
-				System.out.print("\tSave page " + safePage.getPageID() + " of process : " + safePage.getProcessID());
+			Page safePage = pagesQueue.poll();
+			if (safePage != null) {
+				System.out.println("\tSave page " + safePage.getPageID() + " of process : " + safePage.getProcessID());
+				RAM.removePage(safePage);
 				for (Process safeProcess : processes) {
 					if (safePage.getProcessID() == safeProcess.getID()) {
 						safeProcess.addPage(safePage);
@@ -82,8 +87,10 @@ public class MemoryManager {
 					}
 				}
 			}
-			System.out.println("\tAdding a page " + process.getPage(i).getPageID() + " of  process : " + process.getPage(i).getProcessID());
-			RAM.addPage(process.getPage(i));
+			Page nowPage = process.getNextPage();
+			System.out.println("\tAdding a page " + nowPage.getPageID() + " of  process : " + nowPage.getProcessID());
+			pagesQueue.add(nowPage);
+			RAM.addPage(nowPage);
 		}
 	}
 }
