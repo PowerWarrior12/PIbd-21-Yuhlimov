@@ -29,15 +29,15 @@ public class Methods {
         initializeJTree(root);
     }
 
-    //устанавливаем параметры узлов
+    //ГіГ±ГІГ Г­Г ГўГ«ГЁГўГ ГҐГ¬ ГЇГ Г°Г Г¬ГҐГІГ°Г» ГіГ§Г«Г®Гў
     public void setOptions(String nameNode, String FileExpansion) {
-        treeNode = new MyTreeNode(nameNode, FileExpansion, false);
+        treeNode = new File(nameNode, FileExpansion);
         file = new DefaultMutableTreeNode(treeNode);
         folder.add(file);
         hardDrive.addToHDD(treeNode);
     }
 
-    //инициализируем дерево
+    //ГЁГ­ГЁГ¶ГЁГ Г«ГЁГ§ГЁГ°ГіГҐГ¬ Г¤ГҐГ°ГҐГўГ®
     public void initializeJTree(DefaultMutableTreeNode root) {
         folder = new DefaultMutableTreeNode(new MyTreeNode("Folder1", true));
         root.add(folder);
@@ -54,7 +54,7 @@ public class Methods {
         displayTheSelectedObject(folder, 1);
     }
 
-    //получаем размер узла
+    //ГЇГ®Г«ГіГ·Г ГҐГ¬ Г°Г Г§Г¬ГҐГ° ГіГ§Г«Г 
     public int getNodeSize(DefaultMutableTreeNode node) {
         nodeSize = 0;
         if(((MyTreeNode)node.getUserObject()).isFolder()) {
@@ -74,7 +74,7 @@ public class Methods {
         }
     }
 
-    //добавляем узел в дерево
+    //Г¤Г®ГЎГ ГўГ«ГїГҐГ¬ ГіГ§ГҐГ« Гў Г¤ГҐГ°ГҐГўГ®
     public MyTreeNode addToJTree(DefaultMutableTreeNode selectedNode, MyTreeNode node) {
         nameObject = new StringBuilder(node.getName());
         check = false;
@@ -84,18 +84,17 @@ public class Methods {
             identicalObjectsForFolder.put(node.getName(), 1);
         }
 
-        for (; ;) { //проверяем наличие поступаемого объекта в нашем дереве
+        for (; ;) { //ГЇГ°Г®ГўГҐГ°ГїГҐГ¬ Г­Г Г«ГЁГ·ГЁГҐ ГЇГ®Г±ГІГіГЇГ ГҐГ¬Г®ГЈГ® Г®ГЎГєГҐГЄГІГ  Гў Г­Г ГёГҐГ¬ Г¤ГҐГ°ГҐГўГҐ
             for (int i = 0; i < selectedNode.getChildCount(); i++) {
-                //если добавляется файл или папка, которые уже есть в дереве
                 if ((!(((MyTreeNode) ((DefaultMutableTreeNode) selectedNode.getChildAt(i)).getUserObject()).isFolder())
                         && ((MyTreeNode) ((DefaultMutableTreeNode) selectedNode.getChildAt(i)).getUserObject()).getName().contentEquals(nameObject)
-                        && ((MyTreeNode) ((DefaultMutableTreeNode) selectedNode.getChildAt(i)).getUserObject()).getFileFormat().equals(node.getFileFormat()))
+                        && ((File) ((DefaultMutableTreeNode) selectedNode.getChildAt(i)).getUserObject()).getFileFormat().equals(((File) node).getFileFormat()))
                         || (((MyTreeNode) ((DefaultMutableTreeNode) selectedNode.getChildAt(i)).getUserObject()).isFolder()
                         && ((MyTreeNode) ((DefaultMutableTreeNode) selectedNode.getChildAt(i)).getUserObject()).getName().contentEquals(nameObject))) {
                     check = true;
                 }
             }
-            //смотрим сколько раз этот файл или папка встречались в дереве
+            //Г±Г¬Г®ГІГ°ГЁГ¬ Г±ГЄГ®Г«ГјГЄГ® Г°Г Г§ ГЅГІГ®ГІ ГґГ Г©Г« ГЁГ«ГЁ ГЇГ ГЇГЄГ  ГўГ±ГІГ°ГҐГ·Г Г«ГЁГ±Гј Гў Г¤ГҐГ°ГҐГўГҐ
             if (check) {
                 if(identicalObjectsForFile.containsKey(node.getName()) && !(node.isFolder())) {
                     countCopy = identicalObjectsForFile.get(node.getName());
@@ -112,9 +111,9 @@ public class Methods {
         }
 
         if(node.isFolder()) {
-            newTreeNode = new MyTreeNode(nameObject.toString(), true);
+            newTreeNode = new Direction(nameObject.toString());
         } else {
-            newTreeNode = new MyTreeNode(nameObject.toString(), node.getFileFormat(), false);
+            newTreeNode = new File(nameObject.toString(), ((File) node).getFileFormat());
         }
 
         newJTreeNode = new DefaultMutableTreeNode(newTreeNode);
@@ -128,7 +127,7 @@ public class Methods {
         return newTreeNode;
     }
 
-    //удаляем узел из дерева
+    //ГіГ¤Г Г«ГїГҐГ¬ ГіГ§ГҐГ« ГЁГ§ Г¤ГҐГ°ГҐГўГ 
     public void removeFromJTree(boolean removeFromHDD) {
         DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode)fileManager.getLastSelectedPathComponent();
         if(selectedNode != fileManager.getModel().getRoot()) {
@@ -143,7 +142,7 @@ public class Methods {
             MyTreeNode node = (MyTreeNode) selectedNode.getUserObject();
             String nameNode = node.getName();
             if(!node.isFolder()) {
-                String fileExtension = node.getFileFormat();
+                String fileExtension = ((File) node).getFileFormat();
                 System.out.println(String.format("Remove from HDD \"%s.%s\"", nameNode, fileExtension));
             } else {
             	System.out.println(String.format("Remove from HDD \"%s\"", nameNode));
@@ -155,14 +154,14 @@ public class Methods {
         }
     }
 
-    //перемещаем узел в указанную папку, удаляя из исходной
+    //ГЇГҐГ°ГҐГ¬ГҐГ№Г ГҐГ¬ ГіГ§ГҐГ« Гў ГіГЄГ Г§Г Г­Г­ГіГѕ ГЇГ ГЇГЄГі, ГіГ¤Г Г«ГїГї ГЁГ§ ГЁГ±ГµГ®Г¤Г­Г®Г©
     public void moveInFolder (DefaultMutableTreeNode selectedNode, DefaultMutableTreeNode newNode){
         copyTheNode(selectedNode, newNode, false);
         fileManager.setSelectionPath(new TreePath(selectedNode.getPath()));
         removeFromJTree(false);
     }
 
-    //копируем узел и его потомков (если есть)
+    //ГЄГ®ГЇГЁГ°ГіГҐГ¬ ГіГ§ГҐГ« ГЁ ГҐГЈГ® ГЇГ®ГІГ®Г¬ГЄГ®Гў (ГҐГ±Г«ГЁ ГҐГ±ГІГј)
     public void copyTheNode(DefaultMutableTreeNode selectedNode, DefaultMutableTreeNode newNodeToCopy, boolean createNewFile) {
         MyTreeNode object = (MyTreeNode) selectedNode.getUserObject();
         nameObject = new StringBuilder(object.getName());
@@ -170,10 +169,10 @@ public class Methods {
 
         for (; ;) {
             for (int i = 0; i < newNodeToCopy.getChildCount(); i++) {
-                //проверяем наличие объекта в дереве: если это папка или файл, у которых совпадают названия с уже имеющимися в дереве
+                //ГЇГ°Г®ГўГҐГ°ГїГҐГ¬ Г­Г Г«ГЁГ·ГЁГҐ Г®ГЎГєГҐГЄГІГ  Гў Г¤ГҐГ°ГҐГўГҐ: ГҐГ±Г«ГЁ ГЅГІГ® ГЇГ ГЇГЄГ  ГЁГ«ГЁ ГґГ Г©Г«, Гі ГЄГ®ГІГ®Г°Г»Гµ Г±Г®ГўГЇГ Г¤Г ГѕГІ Г­Г Г§ГўГ Г­ГЁГї Г± ГіГ¦ГҐ ГЁГ¬ГҐГѕГ№ГЁГ¬ГЁГ±Гї Гў Г¤ГҐГ°ГҐГўГҐ
                 if (!(((MyTreeNode) ((DefaultMutableTreeNode) newNodeToCopy.getChildAt(i)).getUserObject()).isFolder())
                         && ((MyTreeNode) ((DefaultMutableTreeNode) newNodeToCopy.getChildAt(i)).getUserObject()).getName().contentEquals(nameObject)
-                        && ((MyTreeNode) ((DefaultMutableTreeNode) newNodeToCopy.getChildAt(i)).getUserObject()).getFileFormat().equals(object.getFileFormat())
+                        && ((File) ((DefaultMutableTreeNode) newNodeToCopy.getChildAt(i)).getUserObject()).getFileFormat().equals(((File) object).getFileFormat())
                         || ((MyTreeNode) ((DefaultMutableTreeNode) newNodeToCopy.getChildAt(i)).getUserObject()).isFolder()
                         && ((MyTreeNode) ((DefaultMutableTreeNode) newNodeToCopy.getChildAt(i)).getUserObject()).getName().contentEquals(nameObject)) {
                     check = true;
@@ -181,7 +180,7 @@ public class Methods {
             }
 
             if (check) {
-                nameObject.append(" — copy");
+                nameObject.append(" В— copy");
                 check = false;
             } else {
                 break;
@@ -190,16 +189,16 @@ public class Methods {
 
         if(createNewFile) {
             if(object.isFolder()) {
-                newTreeNode = new MyTreeNode(nameObject.toString(), true);
+                newTreeNode = new Direction(nameObject.toString());
             } else {
-                newTreeNode = new MyTreeNode(nameObject.toString(), object.getFileFormat(), false);
+                newTreeNode = new File(nameObject.toString(), ((File) object).getFileFormat());
                 hardDrive.addToHDD(newTreeNode);
             }
         } else {
             newTreeNode = (MyTreeNode) selectedNode.getUserObject();
         }
 
-        //копируем узел и его потомков, а затем добавляем в дерево
+        //ГЄГ®ГЇГЁГ°ГіГҐГ¬ ГіГ§ГҐГ« ГЁ ГҐГЈГ® ГЇГ®ГІГ®Г¬ГЄГ®Гў, Г  Г§Г ГІГҐГ¬ Г¤Г®ГЎГ ГўГ«ГїГҐГ¬ Гў Г¤ГҐГ°ГҐГўГ®
         newNode = new DefaultMutableTreeNode(newTreeNode);
         newNodeToCopy.add(newNode);
         for (int i = 0; i < selectedNode.getChildCount(); i++) {
@@ -212,10 +211,10 @@ public class Methods {
         displayTheSelectedObject(newNode, 3);
     }
 
-    //отображаем выбранный в дереве объект (снимаем выделение, если он уже не выбран)
+    //Г®ГІГ®ГЎГ°Г Г¦Г ГҐГ¬ ГўГ»ГЎГ°Г Г­Г­Г»Г© Гў Г¤ГҐГ°ГҐГўГҐ Г®ГЎГєГҐГЄГІ (Г±Г­ГЁГ¬Г ГҐГ¬ ГўГ»Г¤ГҐГ«ГҐГ­ГЁГҐ, ГҐГ±Г«ГЁ Г®Г­ ГіГ¦ГҐ Г­ГҐ ГўГ»ГЎГ°Г Г­)
     public void displayTheSelectedObject(DefaultMutableTreeNode selectedNode, int selectionType) {
 
-        //если выбрана папка, то выделяем всех потомков, иначе выбран файл и выделяем только его
+        //ГҐГ±Г«ГЁ ГўГ»ГЎГ°Г Г­Г  ГЇГ ГЇГЄГ , ГІГ® ГўГ»Г¤ГҐГ«ГїГҐГ¬ ГўГ±ГҐГµ ГЇГ®ГІГ®Г¬ГЄГ®Гў, ГЁГ­Г Г·ГҐ ГўГ»ГЎГ°Г Г­ ГґГ Г©Г« ГЁ ГўГ»Г¤ГҐГ«ГїГҐГ¬ ГІГ®Г«ГјГЄГ® ГҐГЈГ®
         if (!selectedNode.isRoot() && ((MyTreeNode) selectedNode.getUserObject()).isFolder()) {
             for (int i = 0; i < selectedNode.getChildCount(); i++) {
                 defaultMutableTreeNode = (DefaultMutableTreeNode) selectedNode.getChildAt(i);

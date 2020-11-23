@@ -49,8 +49,8 @@ public class Main {
 	private JButton buttonMove;
 	private MyTreeNode node;
 
-	private final int diskPartitionSize = 2048; // ðàçìåðû äèñêîâîãî ðàçäåëà
-	private final int diskSectorSize = 4; // ðàçìåðû ñåêòîðà äèñêà
+	private final int diskPartitionSize = 2048; // Ã°Ã Ã§Ã¬Ã¥Ã°Ã» Ã¤Ã¨Ã±ÃªÃ®Ã¢Ã®Ã£Ã® Ã°Ã Ã§Ã¤Ã¥Ã«Ã 
+	private final int diskSectorSize = 4; // Ã°Ã Ã§Ã¬Ã¥Ã°Ã» Ã±Ã¥ÃªÃ²Ã®Ã°Ã  Ã¤Ã¨Ã±ÃªÃ 
 	private String[] fileFormats = { "txt", "docx", "xlsx", "vpp", "obj" };
 
 	public static void main(String[] args) {
@@ -86,7 +86,7 @@ public class Main {
 		hardDrive.setPreferredSize(new Dimension(800, 1000));
 		frame.getContentPane().add(hardDrive);
 
-		// ñîçäàåì è èíèöèàëèçèðóåì äåðåâî
+		// Ã±Ã®Ã§Ã¤Ã Ã¥Ã¬ Ã¨ Ã¨Ã­Ã¨Ã¶Ã¨Ã Ã«Ã¨Ã§Ã¨Ã°Ã³Ã¥Ã¬ Ã¤Ã¥Ã°Ã¥Ã¢Ã®
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode(new MyTreeNode("Hard Disk Drive", true).getName());
 		fileManager = new JTree(root);
 		methods = new Methods(root, hardDrive, fileManager);
@@ -96,7 +96,7 @@ public class Main {
 		DefaultTreeModel model = (DefaultTreeModel) fileManager.getModel();
 		model.reload();
 
-		// îòîáðàæàåì çàíÿòîå ïðîñòðàíñòâî âûáðàííîãî óçëà â äåðåâå
+		// Ã®Ã²Ã®Ã¡Ã°Ã Ã¦Ã Ã¥Ã¬ Ã§Ã Ã­Ã¿Ã²Ã®Ã¥ Ã¯Ã°Ã®Ã±Ã²Ã°Ã Ã­Ã±Ã²Ã¢Ã® Ã¢Ã»Ã¡Ã°Ã Ã­Ã­Ã®Ã£Ã® Ã³Ã§Ã«Ã  Ã¢ Ã¤Ã¥Ã°Ã¥Ã¢Ã¥
 		fileManager.addTreeSelectionListener(e -> {
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) fileManager.getLastSelectedPathComponent();
 			if (node != null) {
@@ -150,8 +150,7 @@ public class Main {
 							.getCountOfEmptySectors() && radioButtonFile.isSelected()) {
 						selectedItem = (DefaultMutableTreeNode) fileManager.getLastSelectedPathComponent();
 						if (selectedItem.isRoot() || ((MyTreeNode) selectedItem.getUserObject()).isFolder()) {
-							MyTreeNode treeNode = methods.addToJTree(selectedItem, new MyTreeNode(textField.getText(),
-									(String) comboBoxFileFormats.getSelectedItem(), false));
+							MyTreeNode treeNode = methods.addToJTree(selectedItem, new File(textField.getText(),(String) comboBoxFileFormats.getSelectedItem()));
 							if (treeNode != null) {
 								hardDrive.addToHDD(treeNode);
 							}

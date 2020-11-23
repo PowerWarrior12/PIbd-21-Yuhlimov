@@ -18,7 +18,24 @@ public class HDD extends JPanel {
     }
 
     //заполнение кластеров диска
-    public void addToHDD(MyTreeNode file) {
+    public void addToHDD(MyTreeNode direction) {
+    	System.out.println(String.format("Adding a file of size %d", direction.getSize()));
+        tempFileCluster = direction.getFirstCluster();
+        for (int i = 0; i < direction.getSize(); i++) {
+            for (int j = 0; j < diskSectors.length; j++) {
+                if (diskSectors[j].getSelectionType() == 0) {
+                    System.out.println(String.format("Filling cluster of disk %d with cluster of \"%s\" file", j, direction.getName()));
+                    diskSectors[j] = tempFileCluster;
+                    tempFileCluster = tempFileCluster.getLinkOnNextCluster();
+                    break;
+                }
+            }
+        }
+        countOfEmptySectors -= direction.getSize();
+    }
+    
+    //заполнение кластеров диска
+    public void addToHDD(File file) {
     	System.out.println(String.format("Adding a file of size %d", file.getSize()));
         tempFileCluster = file.getFirstCluster();
         for (int i = 0; i < file.getSize(); i++) {
