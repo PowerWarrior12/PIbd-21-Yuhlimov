@@ -10,6 +10,7 @@ public class Core {
     private int countOfProcesses = 6;
     private int quantumTime = 100;
     private int allTime = 0;
+    private int[] array = new int[2];
 
     public void createProcesses() throws CloneNotSupportedException {
         for (int pid = 0; pid < countOfProcesses; pid++) {
@@ -67,6 +68,7 @@ public class Core {
                 index = 0;
             }
         }
+        array[1] = allTime;
         System.out.println(String.format("Total time: %d ms", allTime));
     }
     public void processesPlanningWithBlocking() {
@@ -119,7 +121,12 @@ public class Core {
 
             index++;
         }
+        array[0] = allTime;
         System.out.println(String.format("Total time: %d ms", allTime));
         System.out.println("=============================================\n");
+    }
+    public void compareResult(){
+	    	System.out.println("Costs with blocking " + array[0]);
+	    	System.out.println("Costs without blocking " + array[1]);
     }
 }

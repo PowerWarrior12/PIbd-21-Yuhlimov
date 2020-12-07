@@ -5,5 +5,6 @@ public class Main {
         core.createProcesses();
         core.processesPlanningWithoutBlocking();
         core.processesPlanningWithBlocking();
+        core.compareResult();
     }
 }
